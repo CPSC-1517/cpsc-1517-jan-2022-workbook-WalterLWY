@@ -94,7 +94,7 @@ namespace Practice1.Data
             get { return _Years; }
             set 
             { 
-                if (!Utilities.IsPositive(value));
+                if (!Utilities.IsPositive(value))
                 {
                     throw new ArgumentNullException("Year cannot be a negative value.");
                 }

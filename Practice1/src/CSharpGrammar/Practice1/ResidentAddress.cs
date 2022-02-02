@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Practice1
+namespace Practice1.Data
 {
     //  Struct is another developer defined data type
     //      looks like a class definition
@@ -52,5 +52,11 @@ namespace Practice1
 
         //  Note that no "default" constructor was created because I wish the program
         //      to assign the address with all necessary data at creation time
+
+        public override string ToString()
+        {
+            return $"{Number},{Address1},{Address2},{Unit},{City},{ProvinceState}";
+        }
+
     }
 }

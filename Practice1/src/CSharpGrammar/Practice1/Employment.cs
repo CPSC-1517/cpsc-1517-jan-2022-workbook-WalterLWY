@@ -26,10 +26,6 @@ namespace Practice1.Data
         private string _Title;
         private double _Years;
 
-
-
-
-
         //   Property
         //      These are access techniques to retrieve or set data in
         //      your class without directly touching the storage data field
@@ -84,8 +80,11 @@ namespace Practice1.Data
         //      The system generates an internal storage area of the return data type
         //      The system manages the internal storage for the accessor and mutator
         //      This is NO additional logic applied to the data value
-        
-        public int Level { get; set; }
+
+
+        //  Using an enum for this field will AUTOMATICALLY restrict the values 
+        //      this property can contain
+        public SupervisoryLevel Level { get; set; }
 
         //  This property Years could be coded as either a fully implemented property
         //      or as an auto-implemented property
@@ -93,18 +92,85 @@ namespace Practice1.Data
         public double Years
         {
             get { return _Years; }
-            set { _Years = value; }
+            set 
+            { 
+                if (!Utilities.IsPositive(value));
+                {
+                    throw new ArgumentNullException("Year cannot be a negative value.");
+                }
+                _Years = value;
+            }
         }
 
-
         //   Constructor
+        //      is to initialize the physical object (instance) during its creation
+        //      the result of creation is ensure the coder gets an instance in 
+        //      a known state
+        
+        //      if your class defintion has NO constructor coded, then the data members /
+        //      auto implemented properties are set to the C# default data type value
 
-        //   Behavior (Method)
+        //      You can code one or more constructors in your class definition 
+        //      If YOU CODE A CONSTRUCTOR FOR THE CLASS, YOU ARE RESPONSIBLE FOR ALL
+        //      CONSTRUCTORS USED BY THE CLASS!!
 
+        //      Generally, if you are going to code your own constructor(s) you code two types
+        //      a) Default: this constructor does NOT take in any parameters (it mimics the default 
+        //                  system constructor)      
+        //      b) Greedy:  this constructor has list of parameters, on for each property, declare
+        //                  for incoming data
 
+        //      syntax: accesstype classname ([list of parameters]) {constructor code body}
 
+        //      IMPORTANT:  The constructor DOES NOT have a return datatype
+        //                  You DO NOT call a constructor directly, called using the new operator
 
+        //  Default Constructor
+        public Employment()
+        {
+            // Constructor Body
+            // a) empty 
+            // b) you COULD assign literal values to your properties with this constructor
+            Level = SupervisoryLevel.TeamMember;
+            Title = "unknown";
+        }
+
+        //  Greedy Constructor (you can have many different greedy constructors)
+        public Employment(string title, SupervisoryLevel level, double years)
+        {
+            // Constructor Body
+            // a) a parameter for each property
+            // b) you COULD do validation within the constructor instead of the property
+            // c) validation for public readonly data members
+            //    validation for a property within a private set
+            
+            Title = title;
+            Level = level;
+            Years = years;
+        }
+
+        //   Behaviours (aka Method)
+        //      Behaviours are no different than methods elsewhere
+
+        //      Syntax: accesstype [static] returndatatype BehaviourName ([list of parameters]) 
+        //              {Code Body}
+
+        //      There maybe times you wish to obtain all the data in your instance
+        //          all at once for display
+        //      Generally to accomplish this, your class overrides the .ToString() method of classes
+
+        public override string ToString()
+        {
+            // comma separated value list (csv)
+            return $"{Title},{Level},{Years}";
+        }
+
+        public void SetEmployeeResponsibiltyLevel(SupervisoryLevel level)
+        {
+            // You could do validation within this method to ensure acceptable value
+            if (level < 0)
+                throw new Exception("Responsibilty Level must be positive");
+            Level = level;
+        }
     }
-
-
 }

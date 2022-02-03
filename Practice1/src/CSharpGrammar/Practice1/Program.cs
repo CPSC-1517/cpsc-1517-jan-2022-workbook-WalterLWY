@@ -25,6 +25,25 @@ if (Me != null)
     DisplayPerson(Me);
 
 
+
+
+// Modulus Division
+//  Operator is %
+//  Example oddeven
+//      If the number is divisable by 2, it is even, that is 0 as a reminder
+//      If the number is not divisable by 2, it is odd, that is the reminder 
+//      WILL NOT be zero
+//      variable & 2 I can test  the result:
+//      if(variable % 2 == 0) even else odd
+
+//  Weight must be in multiples of 100
+//      So a number is said to be a multiple of 100 if reminder is 0
+//      if(variable % 100 == 0) is multiple else is NOT multiple
+
+//  30000 % 100 result is 0 (300 * 100) 
+//  38880 % 100 result is 80 (388.8 * 100)
+
+
 static void DisplayString(string text)
 {
     Console.WriteLine(text);

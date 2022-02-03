@@ -19,10 +19,25 @@ DisplayString("Hello World");
 Employment Job = CreateJob();
 ResidentAddress Address = CreateAddress();
 
+// Create a Person 
+Person Me = CreatePerson(Job, Address);
+if (Me != null)
+    DisplayPerson(Me);
+
 
 static void DisplayString(string text)
 {
     Console.WriteLine(text);
+}
+
+static void DisplayPerson(Person person)
+{
+    DisplayString($"{person.FirstName} {person.LastName}");
+    DisplayString($"{person.Address.ToString()}");
+    foreach(var emp in person.EmploymentPosition)
+    {
+        DisplayString($"{emp.ToString()}");
+    }
 }
 
 // TESTING 1 : CHECKING THE DEFAULT CONSTRUCTOR 
@@ -48,13 +63,18 @@ Employment CreateJob()
         Job = new Employment("Boss", SupervisoryLevel.Supervisor, 5.5);
         DisplayString($"Greedy good job {Job.ToString()}");
 
-/*        // Bad data: Title ; Change SupervisoryLevel to number (cannot proceed)
-        Job = new Employment("", SupervisoryLevel.Supervisor, 5.5);
-*/        
+        // Without string interpolation [NOT A GOOD CHOICE]
+        // DisplayString("Greedy good job " + Job.ToString());
 
-/*        // Bad data: Negative Year ; Null (cannot proceed)
-        Job = new Employment("Boss", SupervisoryLevel.Supervisor, -5);
-*/    }
+
+        /*        // Bad data: Title ; Change SupervisoryLevel to number (cannot proceed)
+                Job = new Employment("", SupervisoryLevel.Supervisor, 5.5);
+        */
+
+        /*        // Bad data: Negative Year ; Null (cannot proceed)
+                Job = new Employment("Boss", SupervisoryLevel.Supervisor, -5);
+        */
+    }
     catch (ArgumentException ex) // Specific exception message
     {
         DisplayString(ex.Message);
@@ -73,4 +93,59 @@ ResidentAddress CreateAddress()
     Address = new ResidentAddress(10767, "106 ST NW", null, null, "Edmonton", "AB");
     DisplayString($"Greedy Address {Address.ToString()}");
     return Address;
+}
+
+Person CreatePerson(Employment job, ResidentAddress address)
+{
+    List <Employment> Jobs = new List<Employment>(); // .net 6 = new () 
+    Person thePerson = null;
+    try
+    {
+/*        // Create a good person using greedy constructor NO Job List
+        thePerson = new Person("DonNoJob", "Welch", null, address);
+*/
+        // Create a good person using greedy constructor with an empty Job List
+        thePerson = new Person("DonEmptyJob", "Welch", Jobs, address);
+
+        // Create a good person using greedy constructor with a Job List
+        Jobs.Add(new Employment("worker", SupervisoryLevel.TeamMember, 2.1));
+        Jobs.Add(new Employment("leader", SupervisoryLevel.TeamLeader, 7.8));
+        Jobs.Add(job);
+        thePerson = new Person("DonWithJob", "Welch", Jobs, address);
+
+        // Exception testing
+        //  no first name
+        // thePerson = new Person(null, "Welch", Jobs, address);
+        //  no last name
+        // thePerson = new Person("DonWithJob", null, Jobs, address);
+
+        // Can I change the firstname using an assignment statement
+        // the Firstname is a private set.
+        // you are NOT allowed to use a private set on the receiving side
+        //  of an assignment statement.
+        // THIS IS NOT COMPILE
+        // thePerson.FirstName = "NewName";
+
+        // Can I use a behaviour (method) to change the contents of a private
+        //  set property?
+        thePerson.ChangeName("Lowand", "Behold");
+
+        // Can I add another job after the person instance was created
+        thePerson.AddEmployment(new("DP IT", SupervisoryLevel.DepartmentHead, 0.8));
+        // thePerson.AddEmployment(new Employment("DP IT", SupervisoryLevel.DepartmentHead, 0.8));
+
+        // Can I change the public field Address directly
+        ResidentAddress oldAddress = thePerson.Address;
+        oldAddress.City = "Vancouver";
+        thePerson.Address = oldAddress;
+    }
+    catch (ArgumentException ex) // Specific exception message
+    {
+        DisplayString(ex.Message);
+    }
+    catch (Exception ex) // General catch all
+    {
+        DisplayString("Run time error: " + ex.Message);
+    }
+    return thePerson;
 }

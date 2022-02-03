@@ -162,7 +162,12 @@ namespace Practice1.Data
         public override string ToString()
         {
             // comma separated value list (csv)
+            //  The string is being created using String Interpolation 
+            //  $"string characters {fieldname}..."
             return $"{Title},{Level},{Years}";
+
+            // Straight concatentation of strings
+            // return "Title" + "," + Level + "," + Years.ToString();
         }
 
         public void SetEmployeeResponsibiltyLevel(SupervisoryLevel level)

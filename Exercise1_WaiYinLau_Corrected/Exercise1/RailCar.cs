@@ -13,7 +13,7 @@ namespace TrainSystem.data
         private int _Lightweight;
         private int _LoadLimit;
         private string _SerialNumber;
-        private RailCarType _Type;
+        private RailCarType _Type; // No need to set field for RailCarType
 
         // Fully-implemented Properties
         public int Capacity 
@@ -27,7 +27,9 @@ namespace TrainSystem.data
                 if (!Utilities.IsPositiveNonZero(value))
                     throw new ArgumentException("Create RailCar Failed: " +
                         "Capacity must be positive and non-zero whole numbers");
-                _Capacity = Utilities.RoundtoNearestHundred(value);
+                _Capacity = Utilities.RoundtoNearestHundred(value); // Not rounding -> Throw Error Message
+
+                // Add Capacity > LoadLimit Error Here
             }
         }
         public int Lightweight
@@ -41,7 +43,7 @@ namespace TrainSystem.data
                 if (!Utilities.IsPositiveNonZero(value))
                     throw new ArgumentException("Create RailCar Failed: " +
                         "Light Weights must be positive and non-zero whole numbers");
-                _Lightweight = Utilities.RoundtoNearestHundred(value);
+                _Lightweight = Utilities.RoundtoNearestHundred(value); // Not rounding -> Throw Error Message
             }
         }
         public int LoadLimit
@@ -72,7 +74,7 @@ namespace TrainSystem.data
                 _SerialNumber = value.Trim();
             }
         }
-        public RailCarType Type 
+        public RailCarType Type  // Auto implemented instead of Full implemented
         {
             get 
             { 
@@ -86,12 +88,12 @@ namespace TrainSystem.data
 
         // Auto-implemented Properties
         public int GrossWeight { get; private set; }
-        public bool Inservice { get; private set; }
+        public bool Inservice { get; private set; } // Public Set instead of Private
         public bool IsFull
         {
             get 
             {
-                if ((GrossWeight - Lightweight) > Capacity * 0.9)
+                if ((GrossWeight - Lightweight) > Capacity * 0.9) // Netweight > (Capacity * 0.9)
                 {
                     return true;
                 }
@@ -114,11 +116,12 @@ namespace TrainSystem.data
             Lightweight = lightweight;
             if (capacity > loadlimit)
                 throw new ArgumentException("Create RailCar Failed: " +
-                    "Capacity must always less than the Load Limit.");
+                    "Capacity must always less than the Load Limit."); // Put in Capacity Set instead
             Capacity = capacity;
             LoadLimit = loadlimit;
             Type = type;
             Inservice = inservice;
+            // Add GrossWeight = lighteweight to initiate GrossWeight
         }
 
         // Behaviours
@@ -126,11 +129,11 @@ namespace TrainSystem.data
         {
             if (!Utilities.IsPositiveNonZero(grossweight))
                 throw new ArgumentException("Record Scale Failed : " +
-                    "Weights must be positive and non-zero whole numbers");
-            else if (grossweight < Lightweight)
+                    "Weights must be positive and non-zero whole numbers"); // Display weight input
+            else if (grossweight < Lightweight) // Display weight input
                 throw new ArgumentOutOfRangeException("Record Scale Failed : Scale Error - " +
                     "Gross Weights must be greater than the Light Weight of the Rail Car");
-            else if (grossweight > (LoadLimit + Lightweight))
+            else if (grossweight > (LoadLimit + Lightweight)) // Display weight input
                 throw new ArgumentOutOfRangeException("Record Scale Failed : Unsafe Load - " +
                     "For safety, a rail car should be loaded so that Gross Weight " +
                     "is less than the sum of its stenciled Load Limit + Light Weight.");

@@ -18,8 +18,8 @@ namespace TrainSystem.data
                 return Utilities.RoundtoNearestHundred(Engine.HP * 2000);
             }
         }
-        public List<RailCar> RailCars { get; private set; }
-        public int GrossWeight
+        public List<RailCar> RailCars { get; private set; } // Add new Car List
+        public int GrossWeight // Create new method CalculateGrossWeight
         {
             get
             {
@@ -38,7 +38,7 @@ namespace TrainSystem.data
         {
             get
             {
-                if (RailCars == null)
+                if (RailCars == null) // no need if we declare new list at beginning
                     return 0;
                 return RailCars.Count();
             }
@@ -59,7 +59,7 @@ namespace TrainSystem.data
             if ((GrossWeight + car.GrossWeight) > MaxGrossWeight)
                 throw new ArgumentException("Cannot add new car: " +
                     "gross weight exceeded the maximum gross weight allowed for the train.");
-            if (RailCars == null)
+            if (RailCars == null) // no need if we declare new list at first
             {
                 RailCars = new List<RailCar>();
             }
@@ -68,5 +68,15 @@ namespace TrainSystem.data
                 RailCars.Add(car);
             }
         }
-    }
+        // ADD NEW METHOD HERE!
+/*        private int CalculateGrossWeightOfCars()
+        {
+            int totalWeightOfCars = 0;
+            foreach (RailCar car in RailCars)
+            {
+                totalWeightOfCars += car.GrossWeight;
+            }
+            return totalWeightOfCars;
+        }
+*/    }
 }

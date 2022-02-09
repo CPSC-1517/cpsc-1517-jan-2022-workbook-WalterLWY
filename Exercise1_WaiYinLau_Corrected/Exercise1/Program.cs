@@ -15,12 +15,12 @@ Engine CreateEngine()
 {
     Console.WriteLine("Demo: creating A Train Engine:\n");
     // Base Case: Good Data
-    Engine TrainEngine = new Engine("Dummy", "Dummy", 100000, 4000); 
+    Engine TrainEngine = new Engine("Dummy", "Dummy", 100000, 4000); // put inside Try
     try
     {
         //Test 1: Greedy Good Engine
         TrainEngine = new Engine("CP 8002", "48807", 147700, 4400);
-        DisplayString($"Greedy Good Engine: {TrainEngine.ToString()}");
+        DisplayString($"Greedy Good Engine: {TrainEngine.ToString()}"); // Need better display
 
         //Test 2: Greedy Good Engine : Trim Space before / after Model input
         // TrainEngine = new Engine("       CP 8002      ", "48807", 147700, 3500);

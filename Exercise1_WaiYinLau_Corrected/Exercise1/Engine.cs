@@ -31,7 +31,7 @@ namespace TrainSystem.data
                 else if (value < 3500 || value > 5500)
                     throw new ArgumentOutOfRangeException("Create Engine Failed: " +
                         "Horse Power must be a positive whole number between 3,500 and 5,500.");
-                _HP = Utilities.RoundtoNearestHundred(value);
+                _HP = Utilities.RoundtoNearestHundred(value); // Not rounding -> Throw Error Message
             }        
         }
         public string Model
@@ -73,7 +73,7 @@ namespace TrainSystem.data
                 if (!Utilities.IsPositiveNonZero(value))
                     throw new ArgumentException("Create Engine Failed: " +
                         "Weights must be positive and non-zero whole numbers");               
-                _Weight = Utilities.RoundtoNearestHundred(value);
+                _Weight = Utilities.RoundtoNearestHundred(value); // Not rounding -> Throw Error Message
             }
         }
 

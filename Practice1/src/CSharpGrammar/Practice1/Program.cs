@@ -3,13 +3,15 @@
                         // this allows the developer to avoid having to 
                         //  use a fully qualified name every time a 
                         //  reference is made to a class in the namespace
-using System; 
+using System;
 /* in .net 6 some using statement visible in .net 5 are 
    already implemented in the project and do not need 
    to be explicitly coded*/
 
 /* there are still times that you will still need to code 
    using statements to explicitly reference other namespace*/
+using System.Text.Json;
+using System.IO;
 
 // See https://aka.ms/new-console-template for more information
 DisplayString("Hello World");
@@ -24,7 +26,10 @@ Person Me = CreatePerson(Job, Address);
 if (Me != null)
     DisplayPerson(Me);
 
-ArrayReview(Me);
+// ArrayReview(Me);
+
+string pathname = CreateCSVFile();
+ReadCSVFile(pathname);
 
 // Modulus Division
 //  Operator is %
@@ -280,5 +285,79 @@ void PrintArray(int[] array, int size, string text)
         Console.Write($"{array[i]}, ");
     }
 
+
+}
+
+string CreateCSVFile()
+{
+    string pathname = "../../../Employment.dat";
+    try
+    {
+        List<Employment> Jobs = new List<Employment>();
+        Jobs.Add(new Employment("trainee", SupervisoryLevel.Entry, 0.5));
+        Jobs.Add(new Employment("worker", SupervisoryLevel.TeamMember, 3.5));
+        Jobs.Add(new Employment("worker", SupervisoryLevel.TeamMember, 2.1));
+        Jobs.Add(new Employment("leader", SupervisoryLevel.TeamLeader, 7.8));
+        Jobs.Add(new Employment("worker", SupervisoryLevel.Supervisor, 6.0));
+        Jobs.Add(new Employment("worker", SupervisoryLevel.DepartmentHead, 2.1));
+
+        // Create a list of comma-separate value strings
+        // the contents of each string will be 3 values of Employment
+        // in .Net Core when declaring an instance of a class, it is now 
+        //  not necessary to specify the class name after the new. 
+        List<string> csvLines = new();
+
+        // Place all the instances of Employment into the List<string>
+        foreach (var item in Jobs)
+        {
+            // Items represents an instance of Employment in the collection Jobs
+            // .ToString() is the override method in Employment that returns 
+            // call Employment instance value as comma-separate values 
+            csvLines.Add(item.ToString());
+        }
+
+        // Write to a csv file requires the System.IO namespaces
+        // Writing a file will default the output to the folder that 
+        //  contains the executing .exe file
+        // There are several ways to output this file such as using StreamWriter
+        //  and using the File Class 
+        // Within the File class there is a method that outputs a list of strings
+        //  all within one command. There is NOT NEED for a StreamWriter instance.
+        // The pathname of the method at minimum MUST be the filename.
+        // The pathname can redirect the default location by using relative addressing
+        //  with the filename.
+        File.WriteAllLines(pathname, csvLines);
+        Console.WriteLine($"\nCheck out the CSV file at: {Path.GetFullPath(pathname)} ");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    return Path.GetFullPath(pathname);
+}
+
+void ReadCSVFile(string pathname)
+{
+    // Reading a CSV file is similar to writing. One can read ALL lines 
+    //  at one time. There is no need for a StreamReader. One concern
+    //  would be the size of the expected file.
+
+    try
+    {
+        string[] csvFileInput = File.ReadAllLines(pathname);
+        Console.WriteLine("\n\nContents of CSV Employment File: \n");
+        foreach (var item in csvFileInput)
+        {
+            Console.WriteLine(item.ToString()); // Cah have or without a ToString()
+        }
+    }
+    catch (IOException ex)
+    {
+        Console.WriteLine($"Reading CSV File error: {ex.Message}" );
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
 
 }

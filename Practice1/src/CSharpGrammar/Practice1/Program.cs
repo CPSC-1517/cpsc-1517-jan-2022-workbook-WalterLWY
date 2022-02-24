@@ -24,8 +24,7 @@ Person Me = CreatePerson(Job, Address);
 if (Me != null)
     DisplayPerson(Me);
 
-
-
+ArrayReview(Me);
 
 // Modulus Division
 //  Operator is %
@@ -197,4 +196,57 @@ Person CreatePerson(Employment job, ResidentAddress address)
         DisplayString("Run time error: " + ex.Message);
     }
     return thePerson;
+}
+
+void ArrayReview(Person person)
+{
+    // Declare a single-dimensional array size 5
+    // In this declaration, the value in each element is set 
+    //  to the datatype's default (numeric -> 0)
+    int[] array1 = new int[5]; // one can use a literal for the size 
+    // PrintArray(array1, 5, "Declare int array size 5");
+
+    // Declare and set array elements 
+    int [] array2 = new int[] { 1, 2, 4, 8, 16 };
+    // PrintArray(array2, 5, "Declare int array size using a list of supplied values");
+
+    // Alternate syntax
+    // Size of the array is determined using the method .Count() of the collection
+    //  using the inherited class IEnumerable (Array class derived from the base class IEnumerable 
+    //  which is derived from its base class Collections)
+    int[] array3 = new int[] { 1, 3, 6, 12, 24 };
+    PrintArray(array3, array3.Count(), "Declare int array with just a list of supplied values");
+
+    // OR using Length
+    // Size of the array can be determined using the read-only property (just has a get{} of the 
+    //  Array class called .Length
+    PrintArray(array3, array3.Length, "Declare int array with just a list of supplied values");
+
+    // Traversing to an array altering elements
+    // Remember that the array when declared is physically created in memory
+    // each element (cell) has a given value, even if it is the datatype default
+    // when you are "adding" to an array you are really just altering the element value
+
+}
+
+void PrintArray(int[] array, int size, string text)
+{
+    Console.WriteLine($"\n{text}");
+    // item represents an element in the array
+    // array is your collection (array[])
+    // processing will be start (0) to end (size-1)
+    foreach (var item in array)
+    {
+        Console.Write($"{item}, ");
+    }
+    Console.WriteLine("\n");
+
+    // Using the for loop this display output the 
+    //      array back to the front
+    for(int i = size - 1; i >= 0; i--)
+    {
+        Console.Write($"{array[i]}, ");
+    }
+
+
 }

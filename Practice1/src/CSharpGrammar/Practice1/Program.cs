@@ -215,18 +215,50 @@ void ArrayReview(Person person)
     //  using the inherited class IEnumerable (Array class derived from the base class IEnumerable 
     //  which is derived from its base class Collections)
     int[] array3 = new int[] { 1, 3, 6, 12, 24 };
-    PrintArray(array3, array3.Count(), "Declare int array with just a list of supplied values");
+    // PrintArray(array3, array3.Count(), "Declare int array with just a list of supplied values");
 
     // OR using Length
     // Size of the array can be determined using the read-only property (just has a get{} of the 
     //  Array class called .Length
-    PrintArray(array3, array3.Length, "Declare int array with just a list of supplied values");
+    // PrintArray(array3, array3.Length, "Declare int array with just a list of supplied values");
 
     // Traversing to an array altering elements
     // Remember that the array when declared is physically created in memory
     // each element (cell) has a given value, even if it is the datatype default
     // when you are "adding" to an array you are really just altering the element value
 
+    // Logical counter for your array size to indicate the "valid meaningful" values for processing
+    int lsarray1 = 0;
+    int lsarray2 = array2.Count(); // IEnumerable method
+    int lsarray3 = array3.Length;  // Array read-only property
+
+    Random random = new Random();
+    int randomvalue = 0;
+    while (lsarray1 < array1.Length)
+    {
+        randomvalue = random.Next(0, 100);
+        array1[lsarray1] = randomvalue;
+        lsarray1++;
+    }
+    PrintArray(array1, lsarray1, "Array load with random values");
+
+    // Alter a element randomly selected to a new value
+    int arrayposition = random.Next(0, array1.Length);
+    randomvalue = random.Next(0, 100);
+    array1[arrayposition] = randomvalue;
+    PrintArray(array1, lsarray1, "ramdomly replace an array value");
+
+    // Remove an element value from an array
+    // move all array elements in positions greater than the removed element position, "up one"
+    // Assume we are removing element 3 (index 2)
+    int logicalelementnumber = 3; // index of value is logicalposition - 1
+    for (int index = --logicalelementnumber; index < array1.Length - 1; index++)
+    {
+        array1[index] = array1[index + 1];
+    }
+    lsarray1--;
+    array1[array1.Length - 1] = 0;
+    PrintArray(array1, array1.Length, "remove an array value");
 }
 
 void PrintArray(int[] array, int size, string text)

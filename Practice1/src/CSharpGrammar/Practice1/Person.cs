@@ -1,8 +1,14 @@
-﻿using System;
+﻿#region Default (given) Namespaces
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#endregion
+
+#region Additional Namespaces
+using System.Text.Json.Serialization;
+#endregion
 
 namespace Practice1.Data
 {
@@ -53,6 +59,16 @@ namespace Practice1.Data
         //  the definition of the class being defined 
         // In this example Address is a field (data member)
 
+        // This is a field NOT a property
+        // Yes: the datatype is a developer defined datatype (struct)
+        // JSON Serialization has no problem in creating the named pair 
+        //  for this field due to the IncludeFields option
+        // HOWEVER, the deserializer does have a problem
+        // Solution: use an annotation to indicate that the field 
+        //  is included for use by JSON
+        // To use this annotation, you will need to add a namespace (see above)
+        //  in resolving the conflict
+        [JsonInclude]
         public ResidentAddress Address;
 
         // Composition

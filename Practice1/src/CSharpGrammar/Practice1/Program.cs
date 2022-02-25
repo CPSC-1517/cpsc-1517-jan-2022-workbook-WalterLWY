@@ -56,6 +56,13 @@ foreach (Employment employment in Jobs)
 //  30000 % 100 result is 0 (300 * 100) 
 //  38880 % 100 result is 80 (388.8 * 100)
 
+#region JSON file Read and Write
+string Jsonpathname = "../../../Employment.json";
+SaveAsJson(Me, Jsonpathname);
+Person You = ReadAsJson(Jsonpathname);
+// DisplayPerson(You);
+#endregion
+
 
 static void DisplayString(string text)
 {
@@ -167,7 +174,7 @@ Person CreatePerson(Employment job, ResidentAddress address)
         thePerson = new Person("DonNoJob", "Welch", null, address);
 */
         // Create a good person using greedy constructor with an empty Job List
-        thePerson = new Person("DonEmptyJob", "Welch", Jobs, address);
+        //thePerson = new Person("DonEmptyJob", "Welch", Jobs, address);
 
         // Create a good person using greedy constructor with a Job List
         Jobs.Add(new Employment("worker", SupervisoryLevel.TeamMember, 2.1));
@@ -414,4 +421,53 @@ List<Employment> ReadCSVFile(string pathname)
         Console.WriteLine(ex.Message);
     }
     return inputList;
+}
+
+void SaveAsJson(Person me, string pathname)
+{
+    // The term use to read and write Json file is Serialization
+    // the classes use are referred to as Serializers
+    // with writing we can make the file produced more readable by using 
+    //  indentation
+    // Json is very good at using object and properties however, it 
+    //  needs help/prompting to work better with fields
+    JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        IncludeFields = true
+    };
+
+    try
+    {
+        // Serialization 
+        //  produce of serialization is a string
+        string jsonstring = JsonSerializer.Serialize<Person>(me, options);
+
+        // out the Json string to your file indicated in the path
+        File.WriteAllText(pathname, jsonstring); // static class 
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+
+}
+
+Person ReadAsJson(string pathname)
+{
+    Person you = null;
+    try
+    {
+        // bring in the text from the file
+        string jsonstring = File.ReadAllText(pathname);
+
+        // use the deserializer to unpack the json string into 
+        //  the expected structure (<Person>)
+        you = JsonSerializer.Deserialize<Person>(jsonstring);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+    return you;
 }

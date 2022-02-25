@@ -29,7 +29,16 @@ if (Me != null)
 // ArrayReview(Me);
 
 string pathname = CreateCSVFile();
-ReadCSVFile(pathname);
+// string pathname = "../../../Employment.dat"; // Can use this if you have manually created your data file
+
+
+Console.WriteLine("\nResults of parsing the incoming CSV Employment data file.\n");
+List<Employment> Jobs =  ReadCSVFile(pathname);
+Console.WriteLine("\nResults of good parsed incoming CSV Employment data file.\n");
+foreach (Employment employment in Jobs)
+{
+    DisplayString(employment.ToString());
+}
 
 // Modulus Division
 //  Operator is %
@@ -316,6 +325,12 @@ string CreateCSVFile()
             csvLines.Add(item.ToString());
         }
 
+        // TESTING FOR BAD INPUT CSV DATA
+        csvLines.Add($"{SupervisoryLevel.Owner},4.5"); // missing value error
+        csvLines.Add($",{SupervisoryLevel.DepartmentHead},4.5"); // missing text error on title
+        csvLines.Add($"Bad Years, {SupervisoryLevel.Owner},Bob"); // non-numeric value for years
+        csvLines.Add($"Bad Years, {SupervisoryLevel.Owner},-4.5"); // negative value for years
+
         // Write to a csv file requires the System.IO namespaces
         // Writing a file will default the output to the folder that 
         //  contains the executing .exe file
@@ -336,8 +351,10 @@ string CreateCSVFile()
     return Path.GetFullPath(pathname);
 }
 
-void ReadCSVFile(string pathname)
+List<Employment> ReadCSVFile(string pathname)
 {
+    List<Employment> inputList = new List<Employment>();
+    
     // Reading a CSV file is similar to writing. One can read ALL lines 
     //  at one time. There is no need for a StreamReader. One concern
     //  would be the size of the expected file.
@@ -345,10 +362,47 @@ void ReadCSVFile(string pathname)
     try
     {
         string[] csvFileInput = File.ReadAllLines(pathname);
-        Console.WriteLine("\n\nContents of CSV Employment File: \n");
-        foreach (var item in csvFileInput)
-        {
-            Console.WriteLine(item.ToString()); // Cah have or without a ToString()
+        // Console.WriteLine("\n\nContents of CSV Employment File: \n");
+
+        // create a reusable instance of Employment 
+        Employment job = null;
+        // item represent a line (record) in the incoming data
+        // attempt to process EACH line whether any of the 
+        //  incoming lines have an error or not
+        // THUS you will NEED to manage the errors on the 
+        //  individual lines as you process that line
+        //  AND be able to continue to the NEXT line
+        foreach (var line in csvFileInput)
+        {                    
+            // Console.WriteLine(item.ToString()); // Cah have or without a ToString()
+            try
+            {
+                bool returnedBool = Employment.TryParse(line, out job);
+                // returned valid is ALREADY a boolean value: it is already True of False
+                // there is NO NEED to use a relative operator condition to test the field
+                //  (returnedBool == true) is NOT NECESSARY
+                // a relative operator condition RESOLVES to True or False
+                if (returnedBool)
+                {
+                    inputList.Add(job);
+                }
+
+
+
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Format error: {ex.Message}");
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"Argument invalid error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Processing Parse error: {ex.Message}");
+            }
+
         }
     }
     catch (IOException ex)
@@ -359,5 +413,5 @@ void ReadCSVFile(string pathname)
     {
         Console.WriteLine(ex.Message);
     }
-
+    return inputList;
 }

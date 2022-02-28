@@ -14,7 +14,7 @@ using System.Text.Json;
 using System.IO;
 
 // See https://aka.ms/new-console-template for more information
-DisplayString("Hello World");
+// DisplayString("Hello World");
 
 // Fully Qualified Name
 //  Practice1.Data.Employment job = CreateJob ()
@@ -28,17 +28,18 @@ if (Me != null)
 
 // ArrayReview(Me);
 
-string pathname = CreateCSVFile();
+// string pathname = CreateCSVFile();
 // string pathname = "../../../Employment.dat"; // Can use this if you have manually created your data file
 
 
-Console.WriteLine("\nResults of parsing the incoming CSV Employment data file.\n");
-List<Employment> Jobs =  ReadCSVFile(pathname);
-Console.WriteLine("\nResults of good parsed incoming CSV Employment data file.\n");
-foreach (Employment employment in Jobs)
-{
+// Console.WriteLine("\nResults of parsing the incoming CSV Employment data file.\n");
+// List<Employment> Jobs =  ReadCSVFile(pathname);
+// Console.WriteLine("\nResults of good parsed incoming CSV Employment data file.\n");
+// foreach (Employment employment in Jobs)
+/*{
     DisplayString(employment.ToString());
 }
+*/
 
 // Modulus Division
 //  Operator is %
@@ -56,11 +57,19 @@ foreach (Employment employment in Jobs)
 //  30000 % 100 result is 0 (300 * 100) 
 //  38880 % 100 result is 80 (388.8 * 100)
 
-#region JSON file Read and Write
-string Jsonpathname = "../../../Employment.json";
+/*#region JSON file Read and Write
+string Jsonpathname = "../../../Employee.json";
 SaveAsJson(Me, Jsonpathname);
 Person You = ReadAsJson(Jsonpathname);
 // DisplayPerson(You);
+#endregion
+*/
+
+#region JSON file Read and Write
+string Jsonpathname = "../../../Employee.json";
+SaveAsJson(Me, Jsonpathname);
+Person You = ReadAsJson(Jsonpathname);
+DisplayPerson(You);
 #endregion
 
 
@@ -76,26 +85,26 @@ static void DisplayPerson(Person person)
 
     // in our example, the Person constructor ensures that EmploymentPosition
     //  exists (List was declared); this makes the need for the null mute
-    if (person.EmploymentPosition != null)
+    if (person.EmploymentPositions != null)
     {
         // This loop is a forward moving pre-test loop
         // What it checks is "is there another link element to look out".
         // Yes: use the element
         // No: exit loop
 
-        foreach (var emp in person.EmploymentPosition)
+        foreach (var emp in person.EmploymentPositions)
         {
             DisplayString($"{emp.ToString()}");
         }
 
         // A List<T> can actually be manipulated like a array
         // is a pre-test loop BUT does not check for an missing List<T>
-        for (int i = 0; i < person.EmploymentPosition.Count; i++)
+/*        for (int i = 0; i < person.EmploymentPosition.Count; i++)
         {
             DisplayString(person.EmploymentPosition[i].ToString());
         }
-
-        if (person.EmploymentPosition.Count > 0)
+*/
+/*        if (person.EmploymentPosition.Count > 0)
         {
             int x = 0;
             // is a post-test loop 
@@ -105,6 +114,7 @@ static void DisplayPerson(Person person)
                 x++;
             } while (x < person.EmploymentPosition.Count);
         }
+*/
     }
 
 }
@@ -127,10 +137,10 @@ Employment CreateJob()
     try
     {
         Job = new Employment();
-        DisplayString($"Default good job {Job.ToString()}");
+        // DisplayString($"Default good job {Job.ToString()}");
         // Checking exceptions
         Job = new Employment("Boss", SupervisoryLevel.Supervisor, 5.5);
-        DisplayString($"Greedy good job {Job.ToString()}");
+        // DisplayString($"Greedy good job {Job.ToString()}");
 
         // Without string interpolation [NOT A GOOD CHOICE]
         // DisplayString("Greedy good job " + Job.ToString());
@@ -158,9 +168,9 @@ Employment CreateJob()
 ResidentAddress CreateAddress()
 {
     ResidentAddress Address = new ResidentAddress();
-    DisplayString($"Default Address {Address.ToString()}");
+    // DisplayString($"Default Address {Address.ToString()}");
     Address = new ResidentAddress(10767, "106 ST NW", null, null, "Edmonton", "AB");
-    DisplayString($"Greedy Address {Address.ToString()}");
+    // DisplayString($"Greedy Address {Address.ToString()}");
     return Address;
 }
 
@@ -180,7 +190,7 @@ Person CreatePerson(Employment job, ResidentAddress address)
         Jobs.Add(new Employment("worker", SupervisoryLevel.TeamMember, 2.1));
         Jobs.Add(new Employment("leader", SupervisoryLevel.TeamLeader, 7.8));
         Jobs.Add(job);
-        thePerson = new Person("DonWithJob", "Welch", Jobs, address);
+        thePerson = new Person("DonWithJob", "Welch", address, Jobs);
 
         // Exception testing
         //  no first name
@@ -423,7 +433,7 @@ List<Employment> ReadCSVFile(string pathname)
     return inputList;
 }
 
-void SaveAsJson(Person me, string pathname)
+/*void SaveAsJson(Person me, string pathname)
 {
     // The term use to read and write Json file is Serialization
     // the classes use are referred to as Serializers
@@ -442,8 +452,7 @@ void SaveAsJson(Person me, string pathname)
         // Serialization 
         //  produce of serialization is a string
         string jsonstring = JsonSerializer.Serialize<Person>(me, options);
-
-        // out the Json string to your file indicated in the path
+        // output the Json string to your file indicated in the path
         File.WriteAllText(pathname, jsonstring); // static class 
     }
     catch(Exception ex)
@@ -452,8 +461,8 @@ void SaveAsJson(Person me, string pathname)
     }
 
 }
-
-Person ReadAsJson(string pathname)
+*/
+/*Person ReadAsJson(string pathname)
 {
     Person you = null;
     try
@@ -469,5 +478,52 @@ Person ReadAsJson(string pathname)
     {
         Console.WriteLine(ex.Message);
     }
+    return you;
+}*/
+
+void SaveAsJson(Person me, string pathname)
+{
+    //the term use to read and write Json files is Serialization
+    //the classes use are referred to as serializers
+    //with writing we can make the file produced more readable by using
+    //  indentation
+    //Json is very good at using object and properties however, it
+    //  needs help/prompting to work better with fields
+    JsonSerializerOptions options = new JsonSerializerOptions
+    {
+        WriteIndented = true,
+        IncludeFields = true
+    };
+    try
+    {
+        //Serialization
+        //produce of serialization is a string
+        string jsonstring = JsonSerializer.Serialize<Person>(me, options);
+        //output the json string to your file indicated in the path
+        File.WriteAllText(pathname, jsonstring);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
+
+Person ReadAsJson(string pathname)
+{
+    Person you = null;
+    try
+    {
+        //bring in the text from the file
+        string jsonstring = File.ReadAllText(pathname);
+
+        //use the deserializer to unpack the json string into
+        //  the expected structure (<Person>)
+        you = JsonSerializer.Deserialize<Person>(jsonstring);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+
     return you;
 }

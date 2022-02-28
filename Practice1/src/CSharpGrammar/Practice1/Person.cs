@@ -73,7 +73,7 @@ namespace Practice1.Data
 
         // Composition
 
-        public List<Employment> EmploymentPosition { get; private set; }
+        public List<Employment> EmploymentPositions { get; private set; }
 
 /*        public Person() // Default Constructor 
         {
@@ -96,19 +96,21 @@ namespace Practice1.Data
         //      the program is to use the constructor when the class instance 
         //      is created
 
-        public Person (string firstname, string lastname,
-                        List<Employment> employmentpositions, 
-                        ResidentAddress address)
+        public Person (string firstname, string lastname, ResidentAddress address,
+                        List<Employment> employmentpositions)
         {
             FirstName = firstname;
             LastName = lastname;
             if (employmentpositions != null)
-                EmploymentPosition = employmentpositions;
+                EmploymentPositions = employmentpositions;
             else 
                 // allows a null value and the class to have an 
                 //  emply List<T>
-                EmploymentPosition = new List<Employment>();
-            Address = address;
+                EmploymentPositions = new List<Employment>();
+            //IF your parameter name is identical to the property name, to have your
+            //  code work appropriately, place the key word "this." in front of the 
+            //  property  referrence
+            this.Address = address;
         }
 
         public void ChangeName (string firstname, string lastname)
@@ -119,7 +121,7 @@ namespace Practice1.Data
 
         public void AddEmployment (Employment employment)
         {
-            EmploymentPosition.Add(employment);
+            EmploymentPositions.Add(employment);
         }
     }
 }

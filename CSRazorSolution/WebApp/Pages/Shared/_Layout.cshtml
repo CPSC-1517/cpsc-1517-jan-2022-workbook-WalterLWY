@@ -9,7 +9,6 @@
        https://holidaycss.js.org/
     *@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/holiday.css@0.9.8" />
-    <link href="https://cdn.jsdelivr.net/npm/d0css@1/dist/d0.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
 </head>
@@ -18,7 +17,20 @@
         <nav>
              <ul>
                 <li>
+                    <a asp-area="" asp-page="/Index">
+                        <img src="~/img/ChinookMusicMenuLogo.jpg" alt="Logo image" 
+                            title="Go to Home" />
+                    </a>
+                </li>
+                <li>
                     <a asp-area="" asp-page="/Index">Home</a>
+                </li>
+                @*setup for the submenu using holiday css*@
+                <li>
+                    <span>Samples</span>
+                    <ul>
+                        <li><a asp-area="" asp-page="/Samples/BasicDataManagement">Basics</a></li>
+                    </ul>
                 </li>
                 <li>
                     <a asp-area="" asp-page="/Privacy">Privacy</a>

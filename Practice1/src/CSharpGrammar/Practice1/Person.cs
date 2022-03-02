@@ -96,6 +96,12 @@ namespace Practice1.Data
         //      the program is to use the constructor when the class instance 
         //      is created
 
+        // NOTE: FOR READING JSON FILES!!!!!
+        // Your constructor parameter names MUST MATCH your property variable names.
+        // the order in which your properties physically code in the class, does NOT
+        // affect the reading
+        // The parameter names are NOT case sensitive
+        // The order of the parameters on the constructor does not affect reading
         public Person (string firstname, string lastname, ResidentAddress address,
                         List<Employment> employmentpositions)
         {
@@ -109,7 +115,7 @@ namespace Practice1.Data
                 EmploymentPositions = new List<Employment>();
             //IF your parameter name is identical to the property name, to have your
             //  code work appropriately, place the key word "this." in front of the 
-            //  property  referrence
+            //  property  reference
             this.Address = address;
         }
 

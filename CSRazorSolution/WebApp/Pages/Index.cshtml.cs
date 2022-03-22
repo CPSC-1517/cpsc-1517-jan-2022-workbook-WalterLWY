@@ -1,18 +1,43 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+#region Additional Namespaces
+using WestWindSystem.BLL;       // this is where the services were coded
+using WestWindSystem.Entities;  // this is where the entity definition is coded
+#endregion
+
 namespace WebApp.Pages
 {
     public class IndexModel : PageModel // (:) mypage inheritence from other classes (web software)
     {
+        #region Private service fields & class constructor
         private readonly ILogger<IndexModel> _logger;
+        private readonly BuildVersionServices _buildVersionServices;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        // Services that are registered using AddTranscient<>()
+        //  can be accessed on the constructor of the web page class (PageModel)
+        //  This is referred to as Dependency Injection
+        // Each registed service that is injected is listed on the constructor as a parameter
+        // ILogger is a service from Microsoft Logging extensions
+
+        // We need to add our required service(s) to this page
+        // Our services will be known by the BLL class name
+
+        // When you add a service to the page, you will save the service
+        //  reference in a private and readonly field
+        // This variable will be available to all method within this class
+
+
+        public IndexModel(ILogger<IndexModel> logger, BuildVersionServices buildversionservices)
         {
             _logger = logger;
+            _buildVersionServices = buildversionservices;
         }
+        #endregion
 
         public string MyName { get; set; }
+
+        public BuildVersion buildVersionInfo { get; set; }
 
         public void OnGet()
         {
@@ -26,6 +51,10 @@ namespace WebApp.Pages
             {
                 MyName = null;
             }
+
+            // Consume a service (aka method) from the services BuildVersionServices
+            buildVersionInfo = _buildVersionServices.GetBuildVersion();
+
         }
     }
 }

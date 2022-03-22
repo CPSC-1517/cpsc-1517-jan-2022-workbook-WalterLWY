@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using WestWindSystem.DAL;
+using WestWindSystem.BLL;
 #endregion
 
 namespace WestWindSystem
@@ -24,7 +25,23 @@ namespace WestWindSystem
             // Setup the context services 
             services.AddDbContext<WestWindContext>(options);
 
+            // Register the service classes
 
+            // add any business logic layer class to the service collection so our 
+            //  web app has access to the methods (services) within the BLL class. 
+
+            // The argument for the AddTranscient is called a factory 
+            // basically what you are adding is a localised method
+            services.AddTransient<BuildVersionServices>((serviceProvider) => 
+            {
+                // get the dbcontext class that has been registered
+                var context = serviceProvider.GetService<WestWindContext>();
+                
+                // create an instance of the service class (BuildVersionServices) supplying 
+                //  the context reference to the service class 
+                // return the service class instance
+                return new BuildVersionServices(context);
+            });
 
         }
 

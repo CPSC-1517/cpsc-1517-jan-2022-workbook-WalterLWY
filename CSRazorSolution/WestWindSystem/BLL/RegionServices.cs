@@ -26,7 +26,7 @@ namespace WestWindSystem.BLL
         }
         #endregion
 
-        #region Quaries
+        #region Queries
         // This query will have a parameter which will receive an argument value from 
         //  the web page
         // This query will return a single instance of the entity Region (sql table Region)

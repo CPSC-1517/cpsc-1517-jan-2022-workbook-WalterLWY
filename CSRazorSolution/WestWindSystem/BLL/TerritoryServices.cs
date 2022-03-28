@@ -28,12 +28,38 @@ namespace WestWindSystem.BLL
         #region Queries
 
         // Query by a string
-        public List<Territory> GetByPartialDesciption(string partialdescription)
+        // This partial search query has been alter to allow for paging of its results 
+        // If paging is NOT required, the query should have a single string parameter: partialdesciption
+        public List<Territory> GetByPartialDesciption(string partialdescription,
+                                                        int pagenumber,
+                                                        int pagesize,
+                                                        out int totalcount)
         {
             IEnumerable<Territory> info = _context.Territories
                                         .Where(x => x.TerritoryDescription.Contains(partialdescription))
                                         .OrderBy(x => x.TerritoryDescription);
-            return info.ToList();
+            
+            // Using the paging parameters to obtain only the necessary rows that 
+            //  will be shown by the Paginator
+
+            // Determine the total collection size of our query
+            totalcount = info.Count();
+            
+            // Determine the number of rows to skip
+            //  This skipped count reflects the rows of the previous pages
+            //  remember the pagenumber is a natural number (1,2,3...)
+            //  This needs to be treated as an index (natural number - 1)
+            //  The number of rows to skip is index * pagesize
+            int skipRows = (pagenumber - 1) * pagesize;
+            
+            // return only the required number of rows
+            // This will be done using the filters belonging to Linq
+            // use the filter .Skip(n) to skip over n rows from the beginning of a collection
+            // use the filter .Take(n) to take the next n rows from a collection
+            return info.Skip(skipRows).Take(pagesize).ToList();
+
+            // This is the return statement that would be used IF no paging is being implemented
+            //return info.ToList();
         }
 
         // Query by a number

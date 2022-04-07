@@ -42,7 +42,28 @@
                     @foreach (var item in Model.TerritoryInfo)
                     {
                         <tr>
-                            <td>@item.TerritoryID</td>
+                            <td>@*
+                                    This example will send the TerritoryID to 
+                                    another page
+                                    Use the anchor tag to accomplish this task
+                                    the href page value MUST be reference from 
+                                        the Page folder
+                                    the value to be passed is attached to the 
+                                        end of the page reference
+                                    In this example, the value will be passed
+                                        to the receiving page as a routing parameter
+                                    You CAN send multiple values to the new page
+                                    The receiving page must have the same number of 
+                                        routing parameters as those past AND the 
+                                        order of the routing parameters is IMPORTANT
+                                    Page reference syntax: /pathname/value[/value/...]
+                                    The text of your anchor tag DOES NOT need to be
+                                        the value that is being passed
+                                *@
+                                <a href="/Samples/ReceivingPage/@item.TerritoryID">
+                                Edit this Territory
+                                </a>
+                            </td>
                             <td>@item.TerritoryDescription</td>
                             <td><select disabled = "true">
                                 @foreach (var region in Model.RegionList)
@@ -62,7 +83,44 @@
                     }
                 </tbody>
                 <tfoot>
-                    @* Use for summary table information eg. Totals*@
+                    @*  Used for summary table information eg. Totals
+                        Used for displaying paging information
+                    *@
+                    <tr>
+                        <td colspan="3">
+                            @{
+                                // the pageRef is the string representation of the
+                                //  the value to be displayed AND it's numeric
+                                // the string maybe a character line: Next
+                                // the string maybe a numeric: 4
+                                //  First Previous 1 2 3 4 5 Next Last
+                                foreach(var pageRef in Model.Pager)
+                                {
+                                    if (pageRef == Model.Pager.CurrentPage)
+                                    {
+                                        <b>@pageRef.Text</b>
+                                    }
+                                    else
+                                    {
+                                        // Create an anchor tag to move to
+                                        //  the desired collection page
+                                        // The target of the anchor destination
+                                        //  is your current web cshtml
+                                        // This will cause a OnGet issue
+                                        // .Page is a numeric representation 
+                                        //  of the desired page
+                                        // For the asp-page your page name reference
+                                        //  MUST be based from the folder-name Pages
+                                        <a title="Page @pageRef.Page" 
+                                            asp-page="/Samples/PartialFilterSearch"
+                                            asp-route-currentpage="@pageRef.Page">
+                                             @pageRef.Text
+                                        </a>
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
                 </tfoot>
             </table>                 
         }

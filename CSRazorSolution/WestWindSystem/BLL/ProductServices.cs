@@ -28,7 +28,7 @@ namespace WestWindSystem.BLL
 
         #region Queries
         // Filter search returning all products of the requested category (CategoryID)
-        public List<Product> Product_CategoryProduct(int categoryid)
+        public List<Product> Product_CategoryProducts(int categoryid)
         {
             IEnumerable<Product> info = _context.Products.
                                 Where(x => x.CategoryID == categoryid)

@@ -26,7 +26,7 @@ namespace WestWindSystem.BLL
         #endregion
 
         #region Query
-        public List<Supplier> Category_List()
+        public List<Supplier> Supplier_List()
         {
             IEnumerable<Supplier> info = _context.Suppliers
                                         .OrderBy(x => x.CompanyName);

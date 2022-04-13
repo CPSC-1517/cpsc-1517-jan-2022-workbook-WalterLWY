@@ -101,5 +101,11 @@ namespace WebApp.Pages.Samples
             return RedirectToPage(new { searcharg = (string?)null });
         }
 
+        public IActionResult OnPostNew()
+        {
+            return RedirectToPage("/Samples/ReceivingPage");
+        }
+
+
     }
 }

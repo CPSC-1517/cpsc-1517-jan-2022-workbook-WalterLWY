@@ -78,6 +78,10 @@ namespace WestWindSystem.BLL
 
         public int Product_AddProduct(Product item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException("Product data is missing");
+            }
             // This is an optional sample of validation of incoming data
             Product exists = _context.Products
                             .Where(x => x.ProductName.Equals(item.ProductName) &&
@@ -103,6 +107,9 @@ namespace WestWindSystem.BLL
             _context.Products.Add(item);
 
             // commit the LOCAL data to the database
+
+            // If there are validation annotations to your Entity
+            //  they will be executed during the SaveChanges
             _context.SaveChanges();
             
             // After the commit, your pKey value will NOW be available to you
@@ -119,16 +126,28 @@ namespace WestWindSystem.BLL
             // For an update, you must have the pKey value on your instance
             //  if not, it will not work
 
+            // ****** WARNING ********
+            // Can cause PROBLEMS when being used with EntityEntry<t> processing
+
             // This technique returns an instance (object)
-/*            Product exists = _context.Products
+/*             Product exists = _context.Products
                             .Where (x => x.ProductID.Equals(item.ProductID))
                             .FirstOrDefault();
+               if (exists == null) 
+               {
+               throw new Exception($"{item.ProductName} with a size of {item.QuantityPerUnit}" +
+                   $"from the selected supplier is NOT on file");
+                    
+               }
 */
+  
+            // ****** BETTER ********
+            // This does NOT actually return an instance and thus has no
+            //  CONFLICT with using EntityEntry<T>
+
             // This technique does the search BUT returns only a boolean of success
             bool exists = _context.Products.Any(x => x.ProductID == item.ProductID);
-
-            // DEPENDING on which technique you use, your error text will be differece
-            //  ONE: if (exists == null) {...}
+            // if (!_context.Products.Any(x => x.ProductID == item.ProductID)
             if (!exists)
             {
                 throw new Exception($"{item.ProductName} with a size of {item.QuantityPerUnit}" +
